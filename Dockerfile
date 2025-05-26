@@ -1,32 +1,31 @@
-FROM python:3.11-slim
+# Use Python 3.10 as base image
+FROM python:3.10-slim
 
+# Set working directory
 WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    curl \
-    software-properties-common \
-    git \
     portaudio19-dev \
-    python3-pyaudio \
-    ffmpeg \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy requirements file
 COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
+# Copy application code
 COPY . .
 
-# Expose ports for FastAPI and Streamlit
-EXPOSE 8000 8501
+# Create necessary directories
+RUN mkdir -p data
 
-# Create a script to run both services
-RUN echo '#!/bin/bash\n\
-uvicorn orchestrator.main:app --host 0.0.0.0 --port 8000 & \
-streamlit run streamlit_app/app.py --server.port 8501 --server.address 0.0.0.0\n\
-wait' > /app/start.sh && chmod +x /app/start.sh
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
 
-CMD ["/app/start.sh"] 
+# Default command (will be overridden by docker-compose)
+CMD ["python", "streamlit_app/app.py"] 

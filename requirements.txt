@@ -1,45 +1,39 @@
-# Core Framework Dependencies
-fastapi
-uvicorn
-streamlit
-python-dotenv
+# Core Dependencies
+streamlit>=1.32.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+python-dotenv>=1.0.0
 
 # Agent and LLM Tools
-langchain
-crewai
-openai
-faiss-cpu
-sentence-transformers
+langchain>=0.1.0
+crewai>=0.11.0
+openai>=1.12.0
 
-# Data Processing and Analysis
-pandas
-numpy
-yfinance
-alpha_vantage
-beautifulsoup4
-requests
+# Vector Store and Embeddings
+faiss-cpu>=1.7.4
+pinecone-client>=3.0.0
+sentence-transformers>=2.5.0
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.26.0
+yfinance>=0.2.36
+alpha_vantage>=2.3.1
+beautifulsoup4>=4.12.0
+requests>=2.31.0
 
 # Voice Processing
-openai-whisper
-TTS
-sounddevice
-soundfile
-
-# Vector Store
-chromadb
+openai-whisper>=20231117
+TTS>=0.22.0
+sounddevice>=0.4.6
+soundfile>=0.12.1
 
 # Testing and Development
-pytest
-black
-isort
-flake8
-
-# API and Web
-httpx
-aiohttp
-websockets
+pytest>=8.0.0
+black>=24.2.0
+isort>=5.13.0
+flake8>=7.0.0
 
 # Documentation
-mkdocs
-mkdocs-material
- 
+mkdocs>=1.5.0
+mkdocs-material>=9.5.0 

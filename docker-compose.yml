@@ -1,16 +1,110 @@
 version: '3.8'
 
 services:
-  finance-assistant:
+  streamlit:
     build: .
+    command: streamlit run streamlit_app/app.py
     ports:
-      - "8000:8000"  # FastAPI
-      - "8501:8501"  # Streamlit
+      - "8501:8501"
+    environment:
+      - ORCHESTRATOR_URL=http://orchestrator:8000
+    depends_on:
+      - orchestrator
     volumes:
       - .:/app
+    networks:
+      - finance-net
+
+  orchestrator:
+    build: .
+    command: python orchestrator/orchestrator.py
+    ports:
+      - "8000:8000"
+    environment:
+      - API_AGENT_URL=http://api_agent:8001
+      - SCRAPER_AGENT_URL=http://scraper_agent:8002
+      - RETRIEVER_AGENT_URL=http://retriever_agent:8003
+      - ANALYZER_AGENT_URL=http://analyzer_agent:8004
+      - LANGUAGE_AGENT_URL=http://language_agent:8005
+      - VOICE_AGENT_URL=http://voice_agent:8006
+    depends_on:
+      - api_agent
+      - scraper_agent
+      - retriever_agent
+      - analyzer_agent
+      - language_agent
+      - voice_agent
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+  api_agent:
+    build: .
+    command: python agents/api/agent.py
+    ports:
+      - "8001:8001"
+    environment:
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+  scraper_agent:
+    build: .
+    command: python agents/scraper/agent.py
+    ports:
+      - "8002:8002"
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+  retriever_agent:
+    build: .
+    command: python agents/retriever/agent.py
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - finance-net
+
+  analyzer_agent:
+    build: .
+    command: python agents/analyzer/agent.py
+    ports:
+      - "8004:8004"
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+  language_agent:
+    build: .
+    command: python agents/language/agent.py
+    ports:
+      - "8005:8005"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
-    devices:
-      - "/dev/snd:/dev/snd"  # For audio input/output
-    restart: unless-stopped 
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+  voice_agent:
+    build: .
+    command: python agents/voice/agent.py
+    ports:
+      - "8006:8006"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - .:/app
+    networks:
+      - finance-net
+
+networks:
+  finance-net:
+    driver: bridge 
