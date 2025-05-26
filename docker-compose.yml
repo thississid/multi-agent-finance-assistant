@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  finance-assistant:
+    build: .
+    ports:
+      - "8000:8000"  # FastAPI
+      - "8501:8501"  # Streamlit
+    volumes:
+      - .:/app
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+    devices:
+      - "/dev/snd:/dev/snd"  # For audio input/output
+    restart: unless-stopped 

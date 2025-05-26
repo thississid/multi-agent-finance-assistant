@@ -1,0 +1,45 @@
+# Core Framework Dependencies
+fastapi
+uvicorn
+streamlit
+python-dotenv
+
+# Agent and LLM Tools
+langchain
+crewai
+openai
+faiss-cpu
+sentence-transformers
+
+# Data Processing and Analysis
+pandas
+numpy
+yfinance
+alpha_vantage
+beautifulsoup4
+requests
+
+# Voice Processing
+openai-whisper
+TTS
+sounddevice
+soundfile
+
+# Vector Store
+chromadb
+
+# Testing and Development
+pytest
+black
+isort
+flake8
+
+# API and Web
+httpx
+aiohttp
+websockets
+
+# Documentation
+mkdocs
+mkdocs-material
+ 
